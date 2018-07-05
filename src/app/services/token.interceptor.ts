@@ -3,8 +3,7 @@ import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest,
   HttpResponse, HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { AuthService } from './auth.service';
@@ -33,12 +32,6 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     return next.handle(request)
-      .catch((response: any) => {
-        if (response instanceof HttpErrorResponse && response.status === 401) {
-          localStorage.removeItem('token');
-          this.router.navigateByUrl('/log-in');
-        }
-        return Observable.throw(response);
-      });
+   
   }
 }

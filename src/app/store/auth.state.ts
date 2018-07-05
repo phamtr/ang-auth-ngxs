@@ -1,7 +1,7 @@
-import { State, Action, StateContext, Actions } from '@ngxs/store';
+import { State, Action, StateContext, Actions, Selector } from '@ngxs/store';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
-import { LogIn, LogInSuccess, LogInFailure, SignUp, SignUpSuccess, SignUpFailure, LogOut } from './auth.actions';
+import { LogIn, LogInSuccess, LogInFailure, SignUp, SignUpSuccess, SignUpFailure, LogOut, GetStatus } from './auth.actions';
 import { AuthService } from '../services/auth.service';
 
 import { map, catchError } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export interface AppStatemodel {
   };
 
   @State<AppStatemodel>({
-    name: 'app',
+    name: 'auth',
     defaults: initialState
 })
 export class AppState {
@@ -131,6 +131,14 @@ export class AppState {
             localStorage.removeItem('token');
             this.router.navigateByUrl('/');
           }))
+    }
+    @Action(GetStatus)
+    getStatus$(ctx: StateContext<AppStatemodel>, action: GetStatus) {
+        return this.authService.getStatus()
+            .pipe(
+                map(x => ctx.dispatch(new LogInSuccess(x))),
+                catchError((error) => ctx.dispatch(new LogInFailure({ error: error })))
+            );
     }
 }
   

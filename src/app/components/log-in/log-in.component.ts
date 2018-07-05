@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
 import { User } from '../../models/user';
-import { AppState, selectAuthState } from '../../store/app.states';
-import { LogIn } from '../../store/actions/auth.actions';
+//import { AppState, selectAuthState } from '../../store/app.states';
+import { LogIn } from '../../store/auth.actions';
 
 
 @Component({
@@ -15,17 +15,17 @@ import { LogIn } from '../../store/actions/auth.actions';
 export class LogInComponent implements OnInit {
 
   user: User = new User();
-  getState: Observable<any>;
+  getState$: Observable<any>;
   errorMessage: string | null;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store
   ) {
-    this.getState = this.store.select(selectAuthState);
+    this.getState$ = this.store.select(state =>state);
   }
 
   ngOnInit() {
-    this.getState.subscribe((state) => {
+    this.getState$.subscribe((state) => {
       this.errorMessage = state.errorMessage;
     });
   }

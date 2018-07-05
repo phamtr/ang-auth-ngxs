@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store } from '@ngxs/store';
 
-import { AppState } from '../../store/app.states';
-import { GetStatus } from '../../store/actions/auth.actions';
+//import { AppState } from '../../store/app.state';
+import { GetStatus } from '../../store/auth.actions';
 
 @Component({
   selector: 'app-status',
@@ -11,7 +11,7 @@ import { GetStatus } from '../../store/actions/auth.actions';
 })
 export class StatusComponent implements OnInit {
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.store.dispatch(new GetStatus);

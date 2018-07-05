@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
-import { AppState, selectAuthState } from '../../store/app.states';
-import { LogOut } from '../../store/actions/auth.actions';
+import { AppState } from '../../store/auth.state';
+import { LogOut } from '../../store/auth.actions';
 
 
 @Component({
@@ -13,19 +13,19 @@ import { LogOut } from '../../store/actions/auth.actions';
 })
 export class LandingComponent implements OnInit {
 
-  getState: Observable<any>;
+  getState$: Observable<any>;
   isAuthenticated: false;
   user = null;
   errorMessage = null;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store
   ) {
-    this.getState = this.store.select(selectAuthState);
+    this.getState$ = this.store.select(state =>state);
   }
 
   ngOnInit() {
-    this.getState.subscribe((state) => {
+    this.getState$.subscribe((state) => {
       this.isAuthenticated = state.isAuthenticated;
       this.user = state.user;
       this.errorMessage = state.errorMessage;
